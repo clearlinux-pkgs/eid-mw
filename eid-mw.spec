@@ -4,7 +4,7 @@
 #
 Name     : eid-mw
 Version  : 4.4.23
-Release  : 1
+Release  : 2
 URL      : https://github.com/Fedict/eid-mw/archive/v4.4.23.tar.gz
 Source0  : https://github.com/Fedict/eid-mw/archive/v4.4.23.tar.gz
 Summary  : The middleware, viewer and Firefox extension for the Belgian electronic identity card (Belgian eID)
