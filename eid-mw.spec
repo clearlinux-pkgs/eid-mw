@@ -4,10 +4,10 @@
 #
 Name     : eid-mw
 Version  : 4.4.23
-Release  : 2
+Release  : 3
 URL      : https://github.com/Fedict/eid-mw/archive/v4.4.23.tar.gz
 Source0  : https://github.com/Fedict/eid-mw/archive/v4.4.23.tar.gz
-Summary  : The middleware, viewer and Firefox extension for the Belgian electronic identity card (Belgian eID)
+Summary  : Beid PKCS#11 interface
 Group    : Development/Tools
 License  : AML GPL-3.0 LGPL-3.0
 Requires: eid-mw-bin = %{version}-%{release}
@@ -16,8 +16,15 @@ Requires: eid-mw-lib = %{version}-%{release}
 Requires: eid-mw-libexec = %{version}-%{release}
 Requires: eid-mw-license = %{version}-%{release}
 Requires: eid-mw-locales = %{version}-%{release}
+BuildRequires : automake
+BuildRequires : automake-dev
 BuildRequires : c_rehash
+BuildRequires : gettext-bin
 BuildRequires : libjpeg-turbo-dev
+BuildRequires : libtool
+BuildRequires : libtool-dev
+BuildRequires : m4
+BuildRequires : pkg-config-dev
 BuildRequires : pkgconfig(gio-2.0)
 BuildRequires : pkgconfig(gtk+-2.0)
 BuildRequires : pkgconfig(gtk+-3.0)
@@ -29,18 +36,10 @@ BuildRequires : pkgconfig(openssl)
 BuildRequires : pkgconfig(p11-kit-1)
 BuildRequires : sed
 BuildRequires : util-linux
+Patch1: 0001-Fix-for-autoconf-2.70.patch
 
 %description
-# BeID middleware
-## About
-This repository contains the software and viewer for the Belgian
-electronic identity card. With this, you can:
-- Communicate with secure websites that require eID authentication
-- Sign documents and emails using your eID
-- Using the viewer, read the identity data on eID cards, verify their
-validity, and store them for future usage
-- Using the provided API, do all of the above in custom applications of
-your own.
+
 
 %package bin
 Summary: bin components for the eid-mw package.
@@ -68,7 +67,6 @@ Requires: eid-mw-lib = %{version}-%{release}
 Requires: eid-mw-bin = %{version}-%{release}
 Requires: eid-mw-data = %{version}-%{release}
 Provides: eid-mw-devel = %{version}-%{release}
-Requires: eid-mw = %{version}-%{release}
 Requires: eid-mw = %{version}-%{release}
 
 %description dev
@@ -113,21 +111,22 @@ locales components for the eid-mw package.
 
 %prep
 %setup -q -n eid-mw-4.4.23
+cd %{_builddir}/eid-mw-4.4.23
+%patch1 -p1
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1572012483
-# -Werror is for werrorists
+export SOURCE_DATE_EPOCH=1608180772
 export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
 export NM=gcc-nm
 export CFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
-export FCFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
-export FFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
+export FCFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=4 "
+export FFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=4 "
 export CXXFLAGS="$CXXFLAGS -O3 -ffat-lto-objects -flto=4 "
 %reconfigure --disable-static
 make  %{?_smp_mflags}
@@ -137,10 +136,10 @@ export LANG=C.UTF-8
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-make VERBOSE=1 V=1 %{?_smp_mflags} check
+make %{?_smp_mflags} check
 
 %install
-export SOURCE_DATE_EPOCH=1572012483
+export SOURCE_DATE_EPOCH=1608180772
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/eid-mw
 cp %{_builddir}/eid-mw-4.4.23/COPYING %{buildroot}/usr/share/package-licenses/eid-mw/f45ee1c765646813b442ca58de72e20a64a7ddba

@@ -1,0 +1,22 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Patrick McCarty <patrick.mccarty@intel.com>
+Date: Thu, 17 Dec 2020 04:48:27 +0000
+Subject: [PATCH] Fix for autoconf 2.70
+
+Signed-off-by: Patrick McCarty <patrick.mccarty@intel.com>
+---
+ configure.ac | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/configure.ac b/configure.ac
+index 15a6469..3bcd913 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -28,6 +28,7 @@ PKG_PROG_PKG_CONFIG
+ # Checks for header files.
+ AC_CHECK_HEADERS([fcntl.h float.h limits.h netinet/in.h stdlib.h string.h sys/file.h sys/ioctl.h sys/time.h unistd.h malloc.h memory.h sys/timeb.h termios.h])
+ 
++AM_GNU_GETTEXT_REQUIRE_VERSION([0.20.1])
+ AM_GNU_GETTEXT([external])
+ 
+ ###### pcsc-lite ##########
